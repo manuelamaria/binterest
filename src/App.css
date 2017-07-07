@@ -1,0 +1,53 @@
+.App {
+  text-align: center;
+  font-family: Cambria, Cochin, Georgia, Times, Times New Roman, serif;
+  font-size: 18px;
+  color: #5c5b5c;
+}
+
+.App-header {
+  background-color: #FFC300;
+  padding: 20px;
+  color: white;
+}
+
+.App-intro {
+  font-size: large;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.infinite-scroll-component {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.item-container {
+  padding: 20px 30px 20px 30px;
+}
+
+.item-container .title {
+  max-width: 250px;
+  cursor: pointer;
+}
+
+.item-container img {
+  cursor: pointer;
+}
+
+.book-page {
+  padding: 0 0 50px 0;
+}
+
+.book-page div {
+  padding: 25px;
+  text-align: left;
+  font-size: 20px;
+  width: 50%;
+  margin-left: auto;
+  margin-right: auto;
+}
