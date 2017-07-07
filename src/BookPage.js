@@ -8,7 +8,6 @@ class BookPage extends Component {
 
     this.state = {
       'data' : [],
-      'bookId' : props.bookId
     }
 
     this.queryApi();
@@ -16,7 +15,7 @@ class BookPage extends Component {
 
   queryApi(bookId) {
     if (bookId === undefined) {
-      bookId = this.state.bookId;
+      bookId = this.props.bookId;
     }
     fetch(`https://www.googleapis.com/books/v1/volumes/${bookId}?key=AIzaSyCDKtdupRrOGqUibyv2d7JfXKP8BN2DoQ8`)
         .then( response => response.json() )
@@ -30,10 +29,6 @@ class BookPage extends Component {
   componentWillReceiveProps(nextProps)
   {
     if (this.props !== nextProps) {
-      this.setState({
-        'bookId' : nextProps.bookId
-      });
-
       this.queryApi(nextProps.bookId);
     }
   }
