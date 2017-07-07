@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import BookPage from './BookPage.js';
 import Nav from './Nav.js';
-import BookResult from './BookResult';
+
+import BookList from './BookList';
 import './App.css';
 
 class App extends Component {
@@ -12,7 +12,7 @@ class App extends Component {
         super();
 
         this.state = {
-            results : [],
+            items: [],
             navigationMap: new Map()
         }
 
@@ -20,31 +20,6 @@ class App extends Component {
         this.startIndex = 0;
         this.maxResultsAtOnce = 20;
     }
-
-  formatResults(items) {
-    if (items !== undefined) {
-      return items.map((item, i) => {
-          let vi = item.volumeInfo;
-          let title = vi ? vi.title : '';
-          let id = item.id;
-          let author = vi && vi.authors ? vi.authors[0] : '';
-          let img = vi && vi.imageLinks ? vi.imageLinks.thumbnail : '';
-
-          return (
-            <BookResult 
-              key={this.startIndex + i}
-              title={title}
-              author={author}
-              id={id}
-              img={img}
-            />
-          );
-          
-      });
-    }
-
-    return [];
-  }
 
   buildNavigationMap(items) {
     var i = 1;
@@ -64,7 +39,7 @@ class App extends Component {
       const data = await res.json()
       const { items } = data
       this.setState({
-        'results' : this.state.results.concat(this.formatResults(items)),
+        'items' : this.state.items.concat(items),
         'navigationMap' : new Map([...this.state.navigationMap, ...this.buildNavigationMap(items)])
       })
     } else {
@@ -75,7 +50,7 @@ class App extends Component {
   clearFilterData() {
     this.startIndex = 0;
     this.setState({
-          'results' : []
+          'items' : []
     });
   }
 
@@ -100,33 +75,26 @@ class App extends Component {
         <div className="App">
           
           <Route path="/b/:bookId" render={({match}) => {
-            let nav = (this.state.navigationMap.size > 0) ? <Nav map={this.state.navigationMap} bookId={match.params.bookId} /> : null;
+            let nav = (this.state.navigationMap.size > 0) 
+              ? <Nav map={this.state.navigationMap} bookId={match.params.bookId} /> 
+              : null;
+
             return (
               <div>
                 {nav}
                 <BookPage bookId={match.params.bookId} />
               </div>
-            )
+            ) 
           }} />
 
           <Route path="/" exact={true} render={() => (
             <div>
-              <div className="App-header">
-                <h2>Welcome to Binterest</h2>
-                <input defaultValue="Pick your poison ..." 
-                  onKeyPress={this.filter.bind(this)}
-                  onFocus={(e) => e.target.value=''}
-                  />
-              </div>
-              <div className="container">
-                <InfiniteScroll
-                  next={this.fetchData.bind(this)}
-                  hasMore={true}
-                  loader={<h4>Loading...</h4>}
-                >
-                {this.state.results}
-                </InfiniteScroll>
-              </div>
+              <AppHeader onKeyPress={this.filter.bind(this)} />
+              <BookList 
+                fetchData={this.fetchData.bind(this)} 
+                items = {this.state.items}
+                startIndex = {this.startIndex}
+                />
             </div>
           )} />
         </div>
@@ -135,6 +103,15 @@ class App extends Component {
   }
 }
 
+const AppHeader = (props) => (
+  <div className="App-header">
+    <h2>Welcome to Binterest</h2>
+    <input defaultValue="Pick your poison ..." 
+      onKeyPress={props.onKeyPress}
+      onFocus={(e) => e.target.value=''}
+      />
+  </div>
+)
 
 export default App;
 
