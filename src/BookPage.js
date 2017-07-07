@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 
 class BookPage extends Component {
 
@@ -45,9 +44,8 @@ class BookPage extends Component {
     
     return (
       <div className="book-page" >
-          <h2><Link to="/">[x]</Link></h2>
-          <img src={coverSrc} alt="" />
-          <div dangerouslySetInnerHTML={{__html: description}}></div>
+        <img src={coverSrc} alt="" />
+        <div className="description" dangerouslySetInnerHTML={{__html: description}}></div>
       </div>
     );
   }

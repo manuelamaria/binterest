@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Link, Route } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import BookPage from './BookPage.js';
+import Nav from './Nav.js';
+import BookResult from './BookResult';
 import './App.css';
 
 class App extends Component {
@@ -10,7 +12,8 @@ class App extends Component {
         super();
 
         this.state = {
-            results : []
+            results : [],
+            navigationMap: new Map()
         }
 
         this.term = '';
@@ -28,15 +31,13 @@ class App extends Component {
           let img = vi && vi.imageLinks ? vi.imageLinks.thumbnail : '';
 
           return (
-            <div key={this.startIndex + i} className="item-container">
-              <div className="title">
-                <h3>{title}</h3>
-                <i>by {author}</i><p/>
-              </div>
-              <Link to={`/b/${id}`}>
-                <img src={img} alt="Missing" />
-              </Link>
-            </div>
+            <BookResult 
+              key={this.startIndex + i}
+              title={title}
+              author={author}
+              id={id}
+              img={img}
+            />
           );
           
       });
@@ -45,16 +46,30 @@ class App extends Component {
     return [];
   }
 
-  queryApi() {
-    fetch(`https://www.googleapis.com/books/v1/volumes?q=${this.term}&startIndex=${this.startIndex}&maxResults=${this.maxResultsAtOnce}&langRestrict=en&key=AIzaSyCDKtdupRrOGqUibyv2d7JfXKP8BN2DoQ8`)
-            .then( response => response.json() )
-            .then( ({items}) => {
-                  this.setState({
-                    'results' : this.state.results.concat(
-                      this.formatResults(items)
-                    )
-                  })
-            })
+  buildNavigationMap(items) {
+    var i = 1;
+    var map = new Map();
+    
+    for (i = 1; i<items.length-1; i++) {
+      map.set(items[i].id, [items[i-1].id, items[i+1].id])
+    }
+
+    return map;
+  }
+
+  async queryApi() {
+    let res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${this.term}&startIndex=${this.startIndex}&maxResults=${this.maxResultsAtOnce}&langRestrict=en&key=AIzaSyCDKtdupRrOGqUibyv2d7JfXKP8BN2DoQ8`)
+    
+    if (res.status === 200) {
+      const data = await res.json()
+      const { items } = data
+      this.setState({
+        'results' : this.state.results.concat(this.formatResults(items)),
+        'navigationMap' : new Map([...this.state.navigationMap, ...this.buildNavigationMap(items)])
+      })
+    } else {
+      // handle error
+    }      
   }
 
   clearFilterData() {
@@ -84,9 +99,15 @@ class App extends Component {
       <Router>
         <div className="App">
           
-          <Route path="/b/:bookId" render={({match}) => (
-              <BookPage bookId={match.params.bookId} />
-          )} />
+          <Route path="/b/:bookId" render={({match}) => {
+            let nav = (this.state.navigationMap.size > 0) ? <Nav map={this.state.navigationMap} bookId={match.params.bookId} /> : null;
+            return (
+              <div>
+                {nav}
+                <BookPage bookId={match.params.bookId} />
+              </div>
+            )
+          }} />
 
           <Route path="/" exact={true} render={() => (
             <div>
@@ -113,6 +134,7 @@ class App extends Component {
     );
   }
 }
+
 
 export default App;
 
