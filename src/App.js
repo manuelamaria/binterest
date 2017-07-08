@@ -13,10 +13,10 @@ class App extends Component {
 
         this.state = {
             items: [],
-            navigationMap: new Map()
+            term: 'Pick your poison'
         }
 
-        this.term = '';
+        
         this.startIndex = 0;
         this.maxResultsAtOnce = 20;
     }
@@ -33,14 +33,13 @@ class App extends Component {
   }
 
   async queryApi() {
-    let res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${this.term}&startIndex=${this.startIndex}&maxResults=${this.maxResultsAtOnce}&langRestrict=en&key=AIzaSyCDKtdupRrOGqUibyv2d7JfXKP8BN2DoQ8`)
+    let res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${this.state.term}&startIndex=${this.startIndex}&maxResults=${this.maxResultsAtOnce}&langRestrict=en&key=AIzaSyCDKtdupRrOGqUibyv2d7JfXKP8BN2DoQ8`)
     
     if (res.status === 200) {
       const data = await res.json()
       const { items } = data
       this.setState({
-        'items' : this.state.items.concat(items),
-        'navigationMap' : new Map([...this.state.navigationMap, ...this.buildNavigationMap(items)])
+        'items' : this.state.items.concat(items)
       })
     } else {
       // handle error
@@ -57,7 +56,7 @@ class App extends Component {
   filter(e) {
     let searchTerm = e.target.value;
     if (e.which === 13 && searchTerm.length > 0) {
-      this.term = searchTerm;
+      this.state.term = searchTerm;
       this.clearFilterData();
       this.queryApi();
     }
@@ -75,8 +74,11 @@ class App extends Component {
         <div className="App">
           
           <Route path="/b/:bookId" render={({match}) => {
-            let nav = (this.state.navigationMap.size > 0) 
-              ? <Nav map={this.state.navigationMap} bookId={match.params.bookId} /> 
+            let nav = (this.state.items.length > 0) 
+              ? <Nav 
+                  map={this.buildNavigationMap(this.state.items)} 
+                  bookId={match.params.bookId} 
+                  /> 
               : null;
 
             return (
@@ -89,7 +91,10 @@ class App extends Component {
 
           <Route path="/" exact={true} render={() => (
             <div>
-              <AppHeader onKeyPress={this.filter.bind(this)} />
+              <AppHeader 
+                term = {this.state.term}
+                onKeyPress={this.filter.bind(this)} 
+                />
               <BookList 
                 fetchData={this.fetchData.bind(this)} 
                 items = {this.state.items}
@@ -106,7 +111,7 @@ class App extends Component {
 const AppHeader = (props) => (
   <div className="App-header">
     <h2>Welcome to Binterest</h2>
-    <input defaultValue="Pick your poison ..." 
+    <input defaultValue={props.term} 
       onKeyPress={props.onKeyPress}
       onFocus={(e) => e.target.value=''}
       />
