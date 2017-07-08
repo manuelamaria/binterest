@@ -110,12 +110,12 @@ class App extends Component {
 
 const AppHeader = (props) => (
   <div className="App-header">
-    <h1>Show Me Covers</h1>
-    <h3><i>Your visual tool for finding books</i></h3>
+    <div className="search-bar">
     <input defaultValue={props.term} 
       onKeyPress={props.onKeyPress}
       onFocus={(e) => e.target.value=''}
       />
+    </div>
   </div>
 )
 

@@ -7,8 +7,34 @@
 
 .App-header {
   background-color: #FFC300;
-  padding: 20px;
   color: white;
+  text-align: left;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  padding: 10px 0 10px 0;
+}
+
+.App-header .search-bar {
+  width: 100%;
+  text-align: center;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.search-bar input {
+  width: 50%;  
+  height: 20px;
+  font-size: 18px;
+  font-style: italic;
+  border: 0;
+  padding: 5px;
+  font-family: Cambria, Cochin, Georgia, Times, Times New Roman, serif;
+  border-radius: 7px;
+}
+
+.search-bar input:focus {
+  border: 0;
 }
 
 .App-intro {
@@ -70,6 +96,5 @@
 
 .container {
   background-color: #FFFFFF;
-  margin-left: 50px;
-  margin-right: auto;
+  
 }

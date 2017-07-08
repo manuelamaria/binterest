@@ -8,7 +8,7 @@ export default (props) => (
       <i>by {props.author}</i><p/>
     </div>
     <Link to={`/b/${props.id}`}>
-      <img src={props.img} alt="Missing" />
+      <img src={props.img} alt="Loading" />
     </Link>
   </div>
 )
