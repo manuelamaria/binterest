@@ -110,7 +110,8 @@ class App extends Component {
 
 const AppHeader = (props) => (
   <div className="App-header">
-    <h2>Welcome to Binterest</h2>
+    <h1>Show Me Covers</h1>
+    <h3><i>Your visual tool for finding books</i></h3>
     <input defaultValue={props.term} 
       onKeyPress={props.onKeyPress}
       onFocus={(e) => e.target.value=''}
