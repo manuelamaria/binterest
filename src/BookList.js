@@ -31,17 +31,22 @@ class BookList extends React.Component {
 
 
   render() {
-    return (
-      <div className="container">
-        <InfiniteScroll
-          next={this.props.fetchData}
-          hasMore={true}
-          loader={<h4>Loading...</h4>}
-        >
-          {this.formatResults(this.props.items)}
-        </InfiniteScroll>
-      </div>
-    );
+
+    if (this.props.items.length > 0) {
+      return (
+        <div className="container">
+          <InfiniteScroll
+            next={this.props.fetchData}
+            hasMore={true}
+            loader={<h4>Loading...</h4>}
+          >
+            {this.formatResults(this.props.items)}
+          </InfiniteScroll>
+        </div>
+      );
+    } else {
+      return <div />;
+    }
   }
 }
 
