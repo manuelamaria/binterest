@@ -1,30 +1,32 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
-import BookPage from './BookPage.js';
-import Nav from './Nav.js';
-
+import BookPage from './BookPage';
+import Nav from './Nav';
+import Header from './Header';
 import BookList from './BookList';
+import SignupPage from './SignupPage';
+import EmailConfirmationPage from './EmailConfirmationPage';
+
 import './App.css';
 
 class App extends Component {
 
-  constructor() {
-        super();
+  constructor(props) {
+    super(props);
 
-        this.state = {
-            items: [],
-            term: 'Pick your poison'
-        }
+    this.state = {
+      items: [],
+      term: 'Pick your poison'
+    };
 
-        
-        this.startIndex = 0;
-        this.maxResultsAtOnce = 20;
-    }
+    this.startIndex = 0;
+    this.maxResultsAtOnce = 20;
+  }
 
   buildNavigationMap(items) {
     var i = 1;
     var map = new Map();
-    
+
     for (i = 1; i<items.length-1; i++) {
       map.set(items[i].id, [items[i-1].id, items[i+1].id])
     }
@@ -34,22 +36,22 @@ class App extends Component {
 
   async queryApi() {
     let res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${this.state.term}&startIndex=${this.startIndex}&maxResults=${this.maxResultsAtOnce}&langRestrict=en&key=AIzaSyCDKtdupRrOGqUibyv2d7JfXKP8BN2DoQ8`)
-    
+
     if (res.status === 200) {
       const data = await res.json()
       const { items } = data
       this.setState({
-        'items' : this.state.items.concat(items)
+      'items' : this.state.items.concat(items)
       })
     } else {
       // handle error
-    }      
+    }
   }
 
   clearFilterData() {
     this.startIndex = 0;
     this.setState({
-          'items' : []
+        'items' : []
     });
   }
 
@@ -68,56 +70,42 @@ class App extends Component {
   }
 
   render() {
-    
+
     return (
       <Router>
         <div className="App">
-          
+          <Route path="/confirmation" render={() => (<EmailConfirmationPage />)} />
+          <Route path="/signup" render={() => (<SignupPage />)} />
           <Route path="/b/:bookId" render={({match}) => {
-            let nav = (this.state.items.length > 0) 
-              ? <Nav 
-                  map={this.buildNavigationMap(this.state.items)} 
-                  bookId={match.params.bookId} 
-                  /> 
-              : null;
-
+            let nav = (this.state.items.length > 0)
+            ? <Nav
+                map={this.buildNavigationMap(this.state.items)}
+                bookId={match.params.bookId}
+              />
+            : null;
             return (
               <div>
                 {nav}
                 <BookPage bookId={match.params.bookId} />
               </div>
-            ) 
+            )
           }} />
-
-          <Route path="/" exact={true} render={() => (
-            <div>
-              <AppHeader 
-                term = {this.state.term}
-                onKeyPress={this.filter.bind(this)} 
-                />
-              <BookList 
-                fetchData={this.fetchData.bind(this)} 
-                items = {this.state.items}
-                startIndex = {this.startIndex}
-                />
-            </div>
-          )} />
-        </div>
-      </Router>
-    );
+        <Route path="/" exact={true} render={() => (
+          <div>
+            <Header
+              term = {this.state.term}
+              onKeyPress={this.filter.bind(this)}
+            />
+            <BookList
+              fetchData={this.fetchData.bind(this)}
+              items = {this.state.items}
+              startIndex = {this.startIndex}
+            />
+          </div>
+        )} />
+      </div>
+    </Router>);
   }
 }
 
-const AppHeader = (props) => (
-  <div className="App-header">
-    <div className="search-bar">
-    <input defaultValue={props.term} 
-      onKeyPress={props.onKeyPress}
-      onFocus={(e) => e.target.value=''}
-      />
-    </div>
-  </div>
-)
-
 export default App;
-

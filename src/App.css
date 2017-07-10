@@ -23,7 +23,7 @@
 }
 
 .search-bar input {
-  width: 50%;  
+  width: 50%;
   height: 20px;
   font-size: 18px;
   font-style: italic;
@@ -96,5 +96,4 @@
 
 .container {
   background-color: #FFFFFF;
-  
 }
