@@ -9,7 +9,7 @@ export default (props) => (
         />
     </div>
     <div>
-    <Link to="/signup">Signup</Link> 
+    <Link to="/signup">Signup</Link>
     </div>
   </div>
 )

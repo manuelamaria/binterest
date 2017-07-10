@@ -5,6 +5,7 @@ import Nav from './Nav';
 import Header from './Header';
 import BookList from './BookList';
 import SignupPage from './SignupPage';
+import EmailConfirmationPage from './EmailConfirmationPage';
 
 import './App.css';
 
@@ -73,6 +74,7 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
+          <Route path="/confirmation" render={() => (<EmailConfirmationPage />)} />
           <Route path="/signup" render={() => (<SignupPage />)} />
           <Route path="/b/:bookId" render={({match}) => {
             let nav = (this.state.items.length > 0)
