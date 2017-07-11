@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router'
 import firebase from './FirebaseClient'
+import Header from './Header'
 
 require('dotenv').config()
 export default class extends Component {
@@ -42,6 +43,7 @@ export default class extends Component {
   RegisterForm() {
     return (
       <div>
+        <Header />
         <h1>Create Account</h1>
         <form onSubmit={this.handleSubmit} >
           <label style={styles.label} >Email</label>

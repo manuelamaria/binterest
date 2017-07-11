@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
+import firebase from 'firebase';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 import BookPage from './BookPage';
 import Nav from './Nav';
 import Header from './Header';
 import BookList from './BookList';
 import SignupPage from './SignupPage';
+import LoginPage from './LoginPage';
+import MePage from './MePage';
 import EmailConfirmationPage from './EmailConfirmationPage';
 
 import './App.css';
@@ -21,6 +24,19 @@ class App extends Component {
 
     this.startIndex = 0;
     this.maxResultsAtOnce = 20;
+  }
+
+  componentDidMount() {
+    console.log('the component was mounted')
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        console.log('logged in')
+        this.setState({ loggedIn: true });
+      } else {
+        console.log('logged out')
+        this.setState({ loggedIn: false });
+      }
+    }.bind(this));
   }
 
   buildNavigationMap(items) {
@@ -74,8 +90,14 @@ class App extends Component {
     return (
       <Router>
         <div className="App">
+          <Route path="/me" render={() => (<MePage />)} />
           <Route path="/confirmation" render={() => (<EmailConfirmationPage />)} />
           <Route path="/signup" render={() => (<SignupPage />)} />
+          <Route path="/login" render={() => (
+            <LoginPage
+              loggedIn={this.state.loggedIn}
+            />
+          )} />
           <Route path="/b/:bookId" render={({match}) => {
             let nav = (this.state.items.length > 0)
             ? <Nav
@@ -95,6 +117,7 @@ class App extends Component {
             <Header
               term = {this.state.term}
               onKeyPress={this.filter.bind(this)}
+              loggedIn={this.state.loggedIn}
             />
             <BookList
               fetchData={this.fetchData.bind(this)}
