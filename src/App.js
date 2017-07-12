@@ -90,19 +90,19 @@ class App extends Component {
               </div>
             )
           }} />
-        <Route path="/" exact={true} render={() => (
-          <div>
-            <Header
-              term = {this.state.term}
-              onKeyPress={this.filter.bind(this)}
-            />
-            <BookList
-              fetchData={this.fetchData.bind(this)}
-              items = {this.state.items}
-              startIndex = {this.startIndex}
-            />
-          </div>
-        )} />
+          <Route path="/" exact={true} render={() => (
+            <div>
+              <Header
+                term = {this.state.term}
+                onKeyPress={this.filter.bind(this)}
+              />
+              <BookList
+                fetchData={this.fetchData.bind(this)}
+                items = {this.state.items}
+                startIndex = {this.startIndex}
+              />
+            </div>
+          )} />
       </div>
     </Router>);
   }

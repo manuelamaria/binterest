@@ -12,6 +12,10 @@ class BookList extends React.Component {
           let id = item.id;
           let author = vi && vi.authors ? vi.authors[0] : '';
           let img = vi && vi.imageLinks ? vi.imageLinks.thumbnail : '';
+          let publisher = vi && vi.publisher ? vi.publisher : '';
+          let publishedDate = vi && vi.publishedDate 
+            ? new Date(vi.publishedDate).getFullYear() : '';
+          let pageCount = vi && vi.pageCount ? vi.pageCount : '';
 
           return (
             <BookResult 
@@ -20,6 +24,9 @@ class BookList extends React.Component {
               author={author}
               id={id}
               img={img}
+              publisher={publisher}
+              publishedAt={publishedDate}
+              pageCount = {pageCount}
             />
           );
           
@@ -40,7 +47,9 @@ class BookList extends React.Component {
             hasMore={true}
             loader={<h4>Loading...</h4>}
           >
+          
             {this.formatResults(this.props.items)}
+        
           </InfiniteScroll>
         </div>
       );
