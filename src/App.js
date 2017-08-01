@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
 import BookPage from './BookPage';
 import Nav from './Nav';
 import Header from './Header';
@@ -77,18 +77,28 @@ class App extends Component {
           <Route path="/confirmation" render={() => (<EmailConfirmationPage />)} />
           <Route path="/signup" render={() => (<SignupPage />)} />
           <Route path="/b/:bookId" render={({match}) => {
-            let nav = (this.state.items.length > 0)
-            ? <Nav
-                map={this.buildNavigationMap(this.state.items)}
-                bookId={match.params.bookId}
-              />
-            : null;
+
+            //let showNav = (this.state.items.length > 0);
+
             return (
               <div>
-                {nav}
+              <h2><Link to="/">x</Link></h2>
+              <div className="book-page-container">
+                <Nav
+                  map={this.buildNavigationMap(this.state.items)}
+                  bookId={match.params.bookId}
+                  direction="prev"
+                />
                 <BookPage bookId={match.params.bookId} />
+                <Nav
+                  map={this.buildNavigationMap(this.state.items)}
+                  bookId={match.params.bookId}
+                  direction="next"
+                />
+              </div>
               </div>
             )
+
           }} />
           <Route path="/" exact={true} render={() => (
             <div>

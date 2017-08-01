@@ -27,6 +27,7 @@
 
 .container {
   background-color: #FFFFFF;
+  margin-top: 10px;
 }
 
 .infinite-scroll-component {
@@ -63,27 +64,48 @@
 
 .book-page {
   padding: 30px 0 50px 0;
-  border-radius: 25px;
-  background-color: #FCFCFC;
+  background-color: #ffffff;
   border: 1px solid #c6c4c6;
   margin: 0 auto 20px auto;
-  width: 60%;
+  width: 70%;
+}
+
+.book-page-container {
+  display: flex;
+  flex-direction: row;
+  padding-top: 20px;
 }
 
 .book-page div.description {
   padding: 25px;
   text-align: left;
-  font-size: 20px;
+  font-size: 16px;
   width: 70%;
   margin-left: auto;
   margin-right: auto;
 }
 
+.hideContent {
+    overflow: hidden;
+    line-height: 1em;
+    height: 2em;
+}
+
+.showContent {
+    line-height: 1em;
+    height: auto;
+}
+
 .nav {
   margin-left: auto;
   margin-right: auto;
-  display: flex;
-  width: 12%;
+  width: 30%;
+  cursor: pointer;
+  margin-top: 0;
+}
+
+.nav a {
+  text-decoration: none;
 }
 
 

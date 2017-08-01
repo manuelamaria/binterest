@@ -8,6 +8,8 @@ class BookPage extends Component {
 
     this.state = {
       'data' : [],
+      'descriptionClass' : 'description hideContent',
+      'descriptionContentAction' : 'show more'
     }
 
     this.queryApi();
@@ -32,15 +34,41 @@ class BookPage extends Component {
       this.queryApi(nextProps.bookId);
     }
   }
+
+  toggleDescription() 
+  {
+    if (this.state.descriptionClass === 'description hideContent') {
+      this.setState({
+        'descriptionClass' : 'description showContent',
+        'descriptionContentAction' : 'show less'
+      });
+    } else {
+      this.setState({
+        'descriptionClass' : 'description hideContent',
+        'descriptionContentAction' : 'show more'
+      });
+    }
+  }
   
   render() {
     let coverSrc = this.state.data && this.state.data.volumeInfo ? this.state.data.volumeInfo.imageLinks.small : '';
     let description = this.state.data && this.state.data.volumeInfo ? this.state.data.volumeInfo.description : '';
+    let title = this.state.data && this.state.data.volumeInfo ? this.state.data.volumeInfo.title : '';
+    let author = this.state.data && this.state.data.volumeInfo ? this.state.data.volumeInfo.authors[0] : '';
+
+
     
     return (
+      <div className="book-page-container">
       <div className="book-page" >
+        <h1>{title}</h1>
+        <h2>{author}</h2>
         <img src={coverSrc} alt="" />
-        <div className="description" dangerouslySetInnerHTML={{__html: description}}></div>
+        <div 
+          className={this.state.descriptionClass}
+          dangerouslySetInnerHTML={{__html: description}}></div>
+          <span onClick={this.toggleDescription.bind(this)}>{this.state.descriptionContentAction}</span>
+      </div>
       </div>
     );
   }
