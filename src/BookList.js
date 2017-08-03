@@ -41,15 +41,13 @@ class BookList extends React.Component {
 
     if (this.props.items.length > 0) {
       return (
-        <div className="container">
+        <div className="book-list">
           <InfiniteScroll
             next={this.props.fetchData}
             hasMore={true}
             loader={<h4>Loading...</h4>}
           >
-          
             {this.formatResults(this.props.items)}
-        
           </InfiniteScroll>
         </div>
       );

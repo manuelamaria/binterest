@@ -16,11 +16,11 @@ class App extends Component {
 
     this.state = {
       items: [],
-      term: 'Pick your poison'
+      term: ''
     };
 
     this.startIndex = 0;
-    this.maxResultsAtOnce = 20;
+    this.maxResultsAtOnce = 35;
   }
 
   buildNavigationMap(items) {
@@ -101,7 +101,7 @@ class App extends Component {
 
           }} />
           <Route path="/" exact={true} render={() => (
-            <div>
+            <div className="book-list-page">
               <Header
                 term = {this.state.term}
                 onKeyPress={this.filter.bind(this)}
