@@ -145,6 +145,11 @@ body {
     background-repeat: no-repeat;   
 }
 
+.navigation--empty {
+    display: block;
+    width: 300px;
+}
+
 .book-information {
     flex: 1;
     text-align: center;

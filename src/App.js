@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link } from 'react-router-dom';
-import BookPage from './BookPage';
+import BookView from './BookView';
 import Nav from './Nav';
 import Header from './Header';
 import BookList from './BookList';
@@ -15,7 +15,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      items: [],
+      books: [],
       term: ''
     };
 
@@ -27,50 +27,57 @@ class App extends Component {
     var i = 1;
     var map = new Map();
 
+    map.set(items[0].id, [-1, items[1].id]);  //first
+
     for (i = 1; i<items.length-1; i++) {
       map.set(items[i].id, [items[i-1].id, items[i+1].id])
     }
 
+    map.set(items[items.length-1].id, [items[items.length-2], -1]);  //last
+    
     return map;
   }
 
-  async queryApi() {
-    let res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${this.state.term}&startIndex=${this.startIndex}&maxResults=${this.maxResultsAtOnce}&key=AIzaSyCDKtdupRrOGqUibyv2d7JfXKP8BN2DoQ8`)
+  async queryApi(term) {
+
+    if (term === undefined) {
+      term = this.state.term;
+    }
+    let res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${term}&startIndex=${this.startIndex}&maxResults=${this.maxResultsAtOnce}&key=AIzaSyCDKtdupRrOGqUibyv2d7JfXKP8BN2DoQ8`)
 
     if (res.status === 200) {
       const data = await res.json()
       const { items } = data
       this.setState({
-      'items' : this.state.items.concat(items)
+        'books' : this.state.books.concat(items)
       })
     } else {
       // handle error
     }
   }
 
-  clearFilterData() {
+  clearBookList() {
     this.startIndex = 0;
     this.setState({
-        'items' : []
+        'books' : []
     });
   }
 
-  filter(e) {
+  searchBooks(e) {
     let searchTerm = e.target.value;
     if (e.which === 13 && searchTerm.length > 0) {
-      this.state.term = searchTerm;
-      this.clearFilterData();
-      this.queryApi();
+      this.setState({'term': searchTerm});
+      this.clearBookList();
+      this.queryApi(searchTerm);
     }
   }
 
-  fetchData() {
+  fetchBooks() {
     this.startIndex = this.startIndex + this.maxResultsAtOnce;
     this.queryApi();
   }
 
   render() {
-
     return (
       <Router>
         <div className="App">
@@ -78,7 +85,21 @@ class App extends Component {
           <Route path="/signup" render={() => (<SignupPage />)} />
           <Route path="/b/:bookId" render={({match}) => {
 
-            //let showNav = (this.state.items.length > 0);
+            let navPrev = this.state.books.length > 0 
+              ? <Nav
+                    map= {this.buildNavigationMap(this.state.books)}
+                    bookId={match.params.bookId}
+                    direction="prev"
+                  />
+              : '';
+
+            let navNext =   this.state.books.length > 0 
+              ? <Nav
+                    map= {this.buildNavigationMap(this.state.books)}
+                    bookId={match.params.bookId}
+                    direction="next"
+                  />
+              : '';
 
             return (
               <div className="book-page">
@@ -88,17 +109,9 @@ class App extends Component {
                   </Link>
                 </div>
                 <div className="book-page__content">
-                  <Nav
-                    map={this.buildNavigationMap(this.state.items)}
-                    bookId={match.params.bookId}
-                    direction="prev"
-                  />
-                  <BookPage bookId={match.params.bookId} />
-                  <Nav
-                    map={this.buildNavigationMap(this.state.items)}
-                    bookId={match.params.bookId}
-                    direction="next"
-                  />
+                  {navPrev}
+                  <BookView bookId={match.params.bookId} />
+                  {navNext}
                 </div>
               </div>
             )
@@ -108,11 +121,11 @@ class App extends Component {
             <div className="book-list-page">
               <Header
                 term = {this.state.term}
-                onKeyPress={this.filter.bind(this)}
+                onKeyPress={this.searchBooks.bind(this)}
               />
               <BookList
-                fetchData={this.fetchData.bind(this)}
-                items = {this.state.items}
+                fetchData={this.fetchBooks.bind(this)}
+                books = {this.state.books}
                 startIndex = {this.startIndex}
               />
             </div>

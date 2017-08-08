@@ -3,36 +3,14 @@ import { Link } from 'react-router-dom';
 
 class Nav extends React.Component {
   render() {    
-    // let prev = this.props.map.get(this.props.bookId)[0];
-    // let linkPrev = "/b/".concat(prev);
-    // let next = this.props.map.get(this.props.bookId)[1];
-    // let linkNext = "/b/".concat(next);    
-
-    // return (
-    //   <div className="nav">
-    //     <h2><Link to={linkPrev}>[prev]</Link></h2>
-    //     <h2><Link to="/">[x]</Link></h2>
-    //     <h2><Link to={linkNext}>[next]</Link></h2>
-    //   </div>
-    // );
-
-    let image = '';
-    let link = '';
-
-    if (this.props.direction === 'prev') {
-      let prev = this.props.map.get(this.props.bookId)[0];
-      link = "/b/".concat(prev);  
-      image = <h2><Link to={link}>&lt;</Link></h2>;
-    }
-
-    if (this.props.direction === 'next') {
-      let next = this.props.map.get(this.props.bookId)[1];
-      link = "/b/".concat(next);
-      image = <h2><Link to={link}>&gt;</Link></h2>;
-    }
+    let index = this.props.direction === 'prev' ? 0 : 1;
+    let item = this.props.map.get(this.props.bookId)[index];
+    let link = "/b/".concat(item);  
 
     return (
-      <Link to={link} className={"navigation-".concat(this.props.direction)} />
+      item !== -1 
+        ? <Link to={link} className={"navigation-".concat(this.props.direction)} />
+        : <div className="navigation--empty" />
     );
   }
 }
