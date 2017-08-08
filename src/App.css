@@ -1,7 +1,7 @@
 :root {
-    font-family: 'Playfair Display', serif;
+    
     font-weight: normal;
-    font-size: 16px;
+    font-size: 18px;
 }
 
 body {    
@@ -10,11 +10,12 @@ body {
 }
 
 .App {
+    font-family: 'Slabo 27px', serif;
     min-height: 100vh;
     width: 100%;
 }
 
-.book-list-page {
+.book-list-page, .book-page {
     margin: 0;
     padding: 0;
     display: flex;
@@ -36,7 +37,7 @@ body {
     background-size: 9.5em;
     background-position: left 10px top;
     content: '';
-    width: 190px;
+    width: 220px;
     height: 105px;
 }
 
@@ -55,7 +56,7 @@ body {
     box-sizing: border-box;
     padding-left: 20px;
     margin-top: 10px;
-    width: calc(100% - 25px);
+    width: calc(100% - 10px);
     color: #ecf0f1;
     font-size: 1rem;
     text-transform: uppercase;
@@ -63,7 +64,7 @@ body {
     background: transparent;
     background-image: url("./images/search.png");
     background-position: right 10px top;
-    background-size: 2.3em;
+    background-size: 2em;
     background-repeat: no-repeat;
 }
 
@@ -79,7 +80,7 @@ body {
 
 .book-list {
     position: relative;
-    margin: 0 auto;
+    margin: 10px auto;
     width: calc(100% - 10px);
 }
 
@@ -94,10 +95,65 @@ body {
     opacity: 0.8;
 }
 
+
 .infinite-scroll-component {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+}
+
+.book-page__close {
+    width: 100%;
+    text-align: right;
+}
+
+.book-page__close__button {
+    background: url("./images/x.png");
+    background-size: 3em;
+    background-repeat: no-repeat;
+    background-position: left bottom;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    border: 0;
+}
+
+.book-page__content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    
+}
+
+
+.navigation-prev {
+    display: block;
+    width: 300px;
+    background: url("./images/prev.png");
+    background-position: center top 30px;
+    background-size: 3em;
+    background-repeat: no-repeat;
+    
+}
+
+.navigation-next {
+    display: block;
+    width: 300px;
+    background: url("./images/next.png");
+    background-position: center top 30px;
+    background-size: 3em;
+    background-repeat: no-repeat;   
+}
+
+.book-information {
+    flex: 1;
+    text-align: center;
+}
+
+.book-information__description {
+    padding: 30px 10px;
+    text-align: left;
+    
 }
 
 @media only screen and (max-width: 730px) {

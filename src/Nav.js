@@ -21,7 +21,7 @@ class Nav extends React.Component {
 
     if (this.props.direction === 'prev') {
       let prev = this.props.map.get(this.props.bookId)[0];
-      link = "/b/".concat(prev);
+      link = "/b/".concat(prev);  
       image = <h2><Link to={link}>&lt;</Link></h2>;
     }
 
@@ -31,11 +31,8 @@ class Nav extends React.Component {
       image = <h2><Link to={link}>&gt;</Link></h2>;
     }
 
-
     return (
-      <div className="nav">
-        {image}
-      </div>
+      <Link to={link} className={"navigation-".concat(this.props.direction)} />
     );
   }
 }

@@ -20,7 +20,7 @@ class App extends Component {
     };
 
     this.startIndex = 0;
-    this.maxResultsAtOnce = 35;
+    this.maxResultsAtOnce = 40;
   }
 
   buildNavigationMap(items) {
@@ -35,7 +35,7 @@ class App extends Component {
   }
 
   async queryApi() {
-    let res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${this.state.term}&startIndex=${this.startIndex}&maxResults=${this.maxResultsAtOnce}&langRestrict=en&key=AIzaSyCDKtdupRrOGqUibyv2d7JfXKP8BN2DoQ8`)
+    let res = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${this.state.term}&startIndex=${this.startIndex}&maxResults=${this.maxResultsAtOnce}&key=AIzaSyCDKtdupRrOGqUibyv2d7JfXKP8BN2DoQ8`)
 
     if (res.status === 200) {
       const data = await res.json()
@@ -81,25 +81,29 @@ class App extends Component {
             //let showNav = (this.state.items.length > 0);
 
             return (
-              <div>
-              <h2><Link to="/">x</Link></h2>
-              <div className="book-page-container">
-                <Nav
-                  map={this.buildNavigationMap(this.state.items)}
-                  bookId={match.params.bookId}
-                  direction="prev"
-                />
-                <BookPage bookId={match.params.bookId} />
-                <Nav
-                  map={this.buildNavigationMap(this.state.items)}
-                  bookId={match.params.bookId}
-                  direction="next"
-                />
-              </div>
+              <div className="book-page">
+                <div className="book-page__close">
+                  <Link to="/">
+                    <button className="book-page__close__button"></button>
+                  </Link>
+                </div>
+                <div className="book-page__content">
+                  <Nav
+                    map={this.buildNavigationMap(this.state.items)}
+                    bookId={match.params.bookId}
+                    direction="prev"
+                  />
+                  <BookPage bookId={match.params.bookId} />
+                  <Nav
+                    map={this.buildNavigationMap(this.state.items)}
+                    bookId={match.params.bookId}
+                    direction="next"
+                  />
+                </div>
               </div>
             )
-
           }} />
+
           <Route path="/" exact={true} render={() => (
             <div className="book-list-page">
               <Header

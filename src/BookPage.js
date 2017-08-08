@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 
 class BookPage extends Component {
 
-  constructor(props)
-  {
+  constructor(props) {
     super(props);
 
     this.state = {
@@ -59,16 +58,13 @@ class BookPage extends Component {
 
     
     return (
-      <div className="book-page-container">
-      <div className="book-page" >
+      <div className="book-information">
         <h1>{title}</h1>
         <h2>{author}</h2>
-        <img src={coverSrc} alt="" />
+        <img src={coverSrc} alt="Loading" className="book-information__image" />
         <div 
-          className={this.state.descriptionClass}
+          className="book-information__description"
           dangerouslySetInnerHTML={{__html: description}}></div>
-          <span onClick={this.toggleDescription.bind(this)}>{this.state.descriptionContentAction}</span>
-      </div>
       </div>
     );
   }
